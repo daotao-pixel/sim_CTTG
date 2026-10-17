@@ -1,0 +1,45 @@
+<!--
+QUẢN LÝ SIM — ĐẶT FILE INDEX.HTML NÀY Ở THƯ MỤC GỐC REPOSITORY sim_CTTG.
+GitHub mở trực tiếp Apps Script, tránh phụ thuộc vào khung iframe.
+APPS_SCRIPT_URL bên dưới đã điền theo trang GitHub đang dùng.
+Khi tạo deployment Apps Script mới có URL khác, chỉ sửa hằng số này.
+Dữ liệu và mật khẩu vẫn nằm ở Apps Script / Google Sheets.
+-->
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#e9b526">
+<title>Quản lý SIM — Chiến Thắng TG</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f7f6f0;color:#23251e;font:15px/1.6 Arial,sans-serif;min-height:100dvh;display:grid;place-items:center;padding:20px}.card{width:100%;max-width:460px;padding:28px;background:#fff;border:1px solid #e9e5d9;border-top:4px solid #e9b526;border-radius:14px;box-shadow:0 8px 32px #3d320c08}h1{font-size:25px;margin:0 0 12px}p{color:#706e61;margin:10px 0 20px}a{display:inline-block;background:#e9b526;color:#302408;padding:11px 19px;border-radius:9px;font-weight:bold;text-decoration:none}a:focus-visible{outline:3px solid #95700b;outline-offset:3px}.error{color:#b22b2b}[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main class="card">
+<h1>Quản lý SIM</h1>
+<p id="message" role="status">Đang mở ứng dụng quản lý SIM… Nếu chưa chuyển trang, anh bấm nút bên dưới.</p>
+<a id="openApp" hidden>Mở ứng dụng</a>
+<noscript><p>Trình duyệt đang tắt JavaScript. Bật JavaScript rồi tải lại trang để mở ứng dụng.</p></noscript>
+</main>
+<script>
+'use strict';
+// Chỉ thay URL nếu anh tạo bản triển khai có địa chỉ /exec khác.
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzxk7oqXe9lDG1ngNzUSRlxWJ9GossZMMGg1aJZxx-uIdqcB9l2eio9zuAZZkG_RxTw/exec';
+try {
+ const url = new URL(APPS_SCRIPT_URL);
+ if (url.protocol !== 'https:' || url.hostname !== 'script.google.com' || !/^\/macros\/s\/[^/]+\/exec$/.test(url.pathname) || url.search || url.hash) throw new Error('Địa chỉ Apps Script chưa đúng. Kiểm tra APPS_SCRIPT_URL trong index.html.');
+ const openApp = document.getElementById('openApp');
+ openApp.href = url.href;
+ openApp.hidden = false;
+ // Chuyển ở cấp trang, tránh lỗi truy cập trong khung nhúng và tránh vòng lặp khi bấm Quay lại.
+ window.location.replace(url.href);
+} catch (error) {
+ const message = document.getElementById('message');
+ message.className = 'error';
+ message.textContent = error.message || 'Không tự chuyển được. Anh bấm Mở ứng dụng để tiếp tục.';
+}
+</script>
+</body>
+</html>
